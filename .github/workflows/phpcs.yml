@@ -1,0 +1,37 @@
+name: PHPCS - DK WordPress Coding Standards
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  phpcs:
+    name: phpcs
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set PHP version
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+        tools: composer:v2
+        coverage: none
+
+    - name: composer install
+      run: composer install
+
+    - name: Check PHPCS standard
+      run: ./vendor/bin/phpcs -i
+
+    - name: PHPCS check
+      run: composer run lint

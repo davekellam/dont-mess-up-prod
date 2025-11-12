@@ -1,0 +1,37 @@
+{
+    "name": "davekellam/dont-mess-up-prod",
+    "description": "A WordPress plugin to indicate which environment you're currently using in the admin bar",
+    "type": "wordpress-plugin",
+    "version": "0.5.0",
+    "keywords": [
+        "wordpress",
+        "plugin"
+    ],
+    "homepage": "https://github.com/davekellam/dont-mess-up-prod",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Dave Kellam",
+            "email": "kellam@gmail.com",
+            "homepage": "https://davekellam.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "davekellam/phpcs-wp": "dev-main"
+    },
+    "config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"composer/installers": true
+		}
+    },
+    "scripts": {
+        "lint": "phpcs --standard=phpcs.xml .",
+        "lint-fix": "phpcbf ."
+    }
+}

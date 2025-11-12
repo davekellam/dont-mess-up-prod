@@ -1,0 +1,29 @@
+# Dependency Directories
+node_modules
+languages
+release
+vendor
+
+# Project Files
+dist
+ruleset.xml
+
+# Editors and IDEs
+.idea/
+.vscode/
+
+# Mac OSX
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Cypress
+tests/cypress/screenshots
+tests/cypress/videos
+tests/cypress/downloads
+tests/cypress/reports
