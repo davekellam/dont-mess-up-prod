@@ -2,7 +2,7 @@
 /**
  * Environment Indicator Class
  *
- * Handles the display and management of the environment indicator in the WordPress admin bar.
+ * Handles the display and management of the environment indicator in the WordPress admin bar
  *
  * @package DontMessUpProd
  * @since   0.4.0
@@ -10,12 +10,22 @@
 
 namespace DontMessUpProd;
 
+use WP_Admin_Bar;
+use WP_User;
+
 /**
  * Environment Indicator Class
  *
- * Manages environment detection and admin bar display functionality.
+ * Manages environment detection and admin bar display functionality
  */
 class Environment_Indicator {
+	/**
+	 * Cached singleton instance
+	 *
+	 * @var self|null
+	 */
+	private static ?self $instance = null;
+
 	/**
 	 * Default environment colors
 	 *
@@ -41,18 +51,33 @@ class Environment_Indicator {
 	];
 
 	/**
-	 * Allowed user logins who can see the indicator (use filter instead of modifying directly).
+	 * Allowed user logins who can see the indicator
 	 *
 	 * @var array<string>
 	 */
 	private array $allowed_users = [];
 
 	/**
-	 * Setup hooks and default values
+	 * Gets the singleton instance of the Environment_Indicator class
+	 *
+	 * The class bootstraps itself on first access, so including this file is
+	 * sufficient to have the indicator available.
+	 *
+	 * @return self
 	 */
-	public function __construct() {
-		$this->add_hooks();
+	public static function get_instance(): self {
+		if ( null === static::$instance ) {
+			static::$instance = new static();
+			static::$instance->add_hooks();
+		}
+
+		return static::$instance;
 	}
+
+	/**
+	 * Use get_instance() instead
+	 */
+	private function __construct() {}
 
 	/**
 	 * Initialize the environment indicator
@@ -68,11 +93,11 @@ class Environment_Indicator {
 	/**
 	 * Adds an environment indicator item to the WordPress admin bar
 	 *
-	 * @param \WP_Admin_Bar $wp_admin_bar The WP_Admin_Bar instance
+	 * @param WP_Admin_Bar $wp_admin_bar The WP_Admin_Bar instance
 	 * @return void
 	 */
-	public function add_environment_indicator_item( \WP_Admin_Bar $wp_admin_bar ): void {
-		if ( ! is_admin_bar_showing() ) {
+	public function add_environment_indicator_item( WP_Admin_Bar $wp_admin_bar ): void {
+			if ( ! is_admin_bar_showing() ) {
 			return;
 		}
 
@@ -105,8 +130,11 @@ class Environment_Indicator {
 	 * @return string The current environment type (e.g., 'local', 'staging', 'production')
 	 */
 	public function get_current_environment(): string {
-		if ( defined( 'WP_ENVIRONMENT_TYPE' ) && WP_ENVIRONMENT_TYPE ) {
-			return WP_ENVIRONMENT_TYPE;
+		if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+			$wp_environment_type = constant( 'WP_ENVIRONMENT_TYPE' );
+			if ( $wp_environment_type ) {
+				return $wp_environment_type;
+			}
 		}
 
 		$environment_urls = $this->get_environment_urls();
@@ -275,3 +303,5 @@ class Environment_Indicator {
 		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
+
+Environment_Indicator::get_instance();
