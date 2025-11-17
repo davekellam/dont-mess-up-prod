@@ -29,6 +29,8 @@ class Environment_Indicator {
 	/**
 	 * Default environment colors
 	 *
+	 * These names match the WP_ENVIRONMENT_TYPE constant values
+	 *
 	 * @var array<string, string>
 	 */
 	private array $default_colors = [
@@ -97,7 +99,7 @@ class Environment_Indicator {
 	 * @return void
 	 */
 	public function add_environment_indicator_item( WP_Admin_Bar $wp_admin_bar ): void {
-			if ( ! is_admin_bar_showing() ) {
+		if ( ! is_admin_bar_showing() ) {
 			return;
 		}
 
@@ -109,14 +111,17 @@ class Environment_Indicator {
 
 		$wp_admin_bar->add_node(
 			[
-				'id'     => 'environment-indicator',
-				'title'  => sprintf(
-					'<span class="dmup-environment-indicator dmup-environment-%s">%s</span>',
-					esc_attr( $environment ),
-					esc_html( ucfirst( $environment ) )
+				'id'         => 'dmup-environment-indicator',
+				'title'      => sprintf(
+					'<span class="dmup-environment-indicator">%s</span>',
+					esc_html( $environment )
 				),
-				'href'   => false,
-				'parent' => 'top-secondary',
+				'href'       => false,
+				'parent'     => 'top-secondary',
+				'menu_title' => __( 'Environment Indicator', 'dont-mess-up-prod' ),
+				'meta'       => [
+					'class' => 'dmup-environment-' . esc_attr( $environment ),
+				],
 			]
 		);
 	}
@@ -279,21 +284,16 @@ class Environment_Indicator {
 		?>
 		<style id="dmup-styles">
 			#wpadminbar .dmup-environment-indicator {
-				background-color: #333;
-				border-radius: 5px;
-				color: #fff;
 				display: inline-block;
-				font-size: 11px;
 				font-weight: bold;
-				letter-spacing: 0.5px;
-				line-height: 15px;
-				padding: 2px 10px;
-				text-transform: uppercase;
+				padding: 0 15px;	
+				height:100%;
+				text-transform: capitalize;
 			}
 
 			<?php foreach ( $colors as $environment => $color ) : ?>
 				#wpadminbar .dmup-environment-<?php echo esc_attr( $environment ); ?> {
-					background-color: <?php echo esc_attr( $color ); ?> !important;
+					background-color: <?php echo esc_attr( $color ); ?>;
 				}
 			<?php endforeach; ?>
 
