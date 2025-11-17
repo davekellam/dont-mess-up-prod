@@ -11,7 +11,6 @@
 namespace DontMessUpProd;
 
 use WP_Admin_Bar;
-use WP_User;
 
 /**
  * Environment Indicator Class
