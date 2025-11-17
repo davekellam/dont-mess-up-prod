@@ -19,7 +19,7 @@ Create a file `/wp-content/mu-plugins/dmup-config.php`:
 ```php
 <?php
 /**
- * Don't Mess Up Prod Configuration
+ * Plugin Name: Don't Mess Up Prod Configuration
  */
 
 /**
@@ -32,8 +32,8 @@ Create a file `/wp-content/mu-plugins/dmup-config.php`:
  * @return string|false Modified capability setting.
  */
 function dmup_set_minimum_capability( $capability ) {
-	// Enable for Author level and above
-	return 'publish_posts';
+    // Enable for Author level and above
+    return 'publish_posts';
 }
 add_filter( 'dmup_minimum_capability', 'dmup_set_minimum_capability' );
 
@@ -47,13 +47,13 @@ add_filter( 'dmup_minimum_capability', 'dmup_set_minimum_capability' );
  * @return array Modified allowed users array.
  */
 function dmup_set_allowed_users( $users ) {
-	// Add specific user logins here
-	$project_users = [
-		'developer-name',
-		'content-manager-name',
-	];
+    // Add specific user logins here
+    $project_users = [
+        'developer-name',
+        'content-manager-name',
+    ];
 
-	return array_merge( $users, $project_users );
+    return array_merge( $users, $project_users );
 }
 add_filter( 'dmup_allowed_users', 'dmup_set_allowed_users' );
 
@@ -66,12 +66,12 @@ add_filter( 'dmup_allowed_users', 'dmup_set_allowed_users' );
  * @return array Modified environment URLs array.
  */
 function dmup_set_environment_urls( $urls ) {
-	return [
-		'local'       => 'http://yourproject.local',
-		'development' => 'https://dev.yourproject.com',
-		'staging'     => 'https://staging.yourproject.com',
-		'production'  => 'https://yourproject.com',
-	];
+    return [
+        'local'       => 'http://yourproject.local',
+        'development' => 'https://dev.yourproject.com',
+        'staging'     => 'https://staging.yourproject.com',
+        'production'  => 'https://yourproject.com',
+    ];
 }
 add_filter( 'dmup_environment_urls', 'dmup_set_environment_urls' );
 
@@ -84,12 +84,12 @@ add_filter( 'dmup_environment_urls', 'dmup_set_environment_urls' );
  * @return array Modified environment colors array.
  */
 function dmup_set_environment_colors( $colors ) {
-	return [
-		'local'       => '#17a2b8', // blue
-		'development' => '#6f42c1', // purple
-		'staging'     => '#ffc107', // yellow
-		'production'  => '#dc3545', // red
-	];
+    return [
+        'local'       => '#17a2b8', // blue
+        'development' => '#6f42c1', // purple
+        'staging'     => '#ffc107', // yellow
+        'production'  => '#dc3545', // red
+    ];
 }
 add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors' );
 ```
@@ -99,6 +99,7 @@ add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors' );
 The plugin detects the current environment using this priority order:
 
 1. **WP_ENVIRONMENT_TYPE constant** - Set in `wp-config.php`:
+
    ```php
    define( 'WP_ENVIRONMENT_TYPE', 'staging' );
    ```
@@ -110,4 +111,3 @@ The plugin detects the current environment using this priority order:
 ## License
 
 GPL-2.0-or-later
-
