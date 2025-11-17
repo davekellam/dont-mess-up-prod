@@ -19,4 +19,4 @@
 
 define( 'DONT_MESS_UP_PROD_VERSION', '0.6.0-dev' );
 
-require_once 'includes/class-environment-indicator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-environment-indicator.php';
