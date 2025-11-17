@@ -135,7 +135,7 @@ class Environment_Indicator {
 	 */
 	public function get_current_environment(): string {
 		if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
-			$wp_environment_type = constant( 'WP_ENVIRONMENT_TYPE' );
+			$wp_environment_type = WP_ENVIRONMENT_TYPE;
 			if ( $wp_environment_type ) {
 				return $wp_environment_type;
 			}
