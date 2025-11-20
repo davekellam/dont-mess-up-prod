@@ -17,6 +17,11 @@
  * @copyright         2025 Dave Kellam
  */
 
+namespace DontMessUpProd;
+
+use DontMessUpProd\Environment_Indicator;
+
 define( 'DONT_MESS_UP_PROD_VERSION', '0.6.0' );
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-environment-indicator.php';
+Environment_Indicator::get_instance();

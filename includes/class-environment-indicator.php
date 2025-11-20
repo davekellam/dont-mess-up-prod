@@ -302,5 +302,3 @@ class Environment_Indicator {
 		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
-
-Environment_Indicator::get_instance();
