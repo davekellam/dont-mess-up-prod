@@ -128,25 +128,26 @@ class Environment_Indicator {
 	/**
 	 * Determines the current environment
 	 *
-	 * Checks the WP_ENVIRONMENT_TYPE constant first, then falls back to checking
-	 * the site URL against a configurable list of environment URLs
+	 * Checks the the site URL against a configurable list of environment URLs first, 
+	 * then falls back to checking to the WP_ENVIRONMENT_TYPE constant if defined
+	 * 
 	 *
 	 * @return string The current environment type (e.g., 'local', 'staging', 'production')
 	 */
 	public function get_current_environment(): string {
-		if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
-			$wp_environment_type = WP_ENVIRONMENT_TYPE;
-			if ( $wp_environment_type ) {
-				return $wp_environment_type;
-			}
-		}
-
 		$environment_urls = $this->get_environment_urls();
 		$current_url      = get_site_url();
 
 		foreach ( $environment_urls as $env => $url ) {
 			if ( str_contains( $current_url, $url ) ) {
 				return $env;
+			}
+		}
+		
+		if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+			$wp_environment_type = WP_ENVIRONMENT_TYPE;
+			if ( $wp_environment_type ) {
+				return $wp_environment_type;
 			}
 		}
 
