@@ -101,7 +101,8 @@ class Environment_Indicator {
 			return;
 		}
 
-		$environment = $this->get_current_environment();
+		$environment      = $this->get_current_environment();
+		$environment_urls = $this->get_environment_urls();
 
 		$wp_admin_bar->add_node(
 			[
@@ -118,6 +119,24 @@ class Environment_Indicator {
 				],
 			]
 		);
+
+		if ( ! empty( $environment_urls ) ) {
+			foreach ( $environment_urls as $environment_name => $url ) {
+				$wp_admin_bar->add_node(
+					[
+						'id'     => 'dmup-environment-indicator-' . sanitize_key( $environment_name ),
+						'title'  => ucwords( esc_html( $environment_name ) ),
+						'href'   => esc_url( $url ),
+						'parent' => 'dmup-environment-indicator',
+						'meta'   => [
+							'class'  => 'dmup-nav-external',
+							'target' => '_blank',
+							'rel'    => 'noopener',
+						],
+					]
+				);
+			}
+		}
 	}
 
 	/**
