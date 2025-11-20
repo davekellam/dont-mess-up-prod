@@ -40,16 +40,11 @@ class Environment_Indicator {
 	];
 
 	/**
-	 * Default environment URLs
+	 * Environment URLs
 	 *
 	 * @var array<string, string>
 	 */
-	private array $default_environment_urls = [
-		'local'       => 'http://example.local',
-		'development' => 'https://dev.example.com',
-		'staging'     => 'https://staging.example.com',
-		'production'  => 'https://example.com',
-	];
+	private array $environment_urls = [];
 
 	/**
 	 * Allowed user logins who can see the indicator
@@ -194,7 +189,7 @@ class Environment_Indicator {
 		 *
 		 * @param array<string, string> $urls Array of environment URLs
 		 */
-		return apply_filters( 'dmup_environment_urls', $this->default_environment_urls );
+		return apply_filters( 'dmup_environment_urls', $this->environment_urls );
 	}
 
 	/**
