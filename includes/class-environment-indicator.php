@@ -54,6 +54,13 @@ class Environment_Indicator {
 	private array $allowed_users = [];
 
 	/**
+	 * Undocumented variable
+	 *
+	 * @var string
+	 */
+	private string $minimum_capability = 'publish_posts';
+
+	/**
 	 * Gets the singleton instance of the Environment_Indicator class
 	 *
 	 * The class bootstraps itself on first access, so including this file is
@@ -275,10 +282,9 @@ class Environment_Indicator {
 		 * @since 0.3.0
 		 *
 		 * @param string|false $capability The user capability required to see the indicator
-		 *                                 Default is false (disabled by default)
-		 *                                 Examples: 'publish_posts' (author+), 'edit_posts' (contributor+)
+		 *                                 Default is 'publish_posts' (can also be set to false)
 		 */
-		return apply_filters( 'dmup_minimum_capability', false );
+		return apply_filters( 'dmup_minimum_capability', $this->minimum_capability );
 	}
 
 	/**
