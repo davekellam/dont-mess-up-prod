@@ -2,11 +2,18 @@
 
 This plugin displays a colored environment indicator in the WordPress admin bar to help developers and content managers quickly identify which environment they're working in. This helps prevent accidentally making changes to production sites when you think you're working on staging or development.
 
-## Installation
+## Installation (manual)
 
 1. Upload the plugin files to `/wp-content/plugins/dont-mess-up-prod/`
-2. Activate the plugin through the 'Plugins' screen in WordPress
+2. Activate the plugin through the "Plugins" screen in WordPress
 3. Configure the plugin using filters (see Configuration section below)
+
+### Installation (composer)
+
+```bash
+composer require davekellam/dont-mess-up-prod
+wp plugin activate dont-mess-up-prod
+```
 
 ## Configuration
 
@@ -60,7 +67,7 @@ add_filter( 'dmup_allowed_users', 'dmup_set_allowed_users' );
 /**
  * Configure environment URLs for your project
  *
- * Customize the URLs used to detect different environments
+ * Customize the URLs used to detect different environments and populate child links under the admin bar menu item
  *
  * @param array $urls Current environment URLs array.
  * @return array Modified environment URLs array.
@@ -98,15 +105,16 @@ add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors' );
 
 The plugin detects the current environment using this priority order:
 
-1. **WP_ENVIRONMENT_TYPE constant** - Set in `wp-config.php`:
+1. **URL matching** – Compares the current site URL against the configured environment URLs. A match both sets the active environment and exposes a direct child link in the admin bar back to that URL.
+2. **WP_ENVIRONMENT_TYPE constant** – Set in `wp-config.php` if URL matching does not find a match:
 
-   ```php
-   define( 'WP_ENVIRONMENT_TYPE', 'staging' );
-   ```
+    ```php
+    define( 'WP_ENVIRONMENT_TYPE', 'staging' );
+    ```
 
-2. **URL matching** - Compares current site URL against the configured environment URLs
+3. **Fallback message** – If neither check succeeds, the admin bar shows the translated “No Environment Set” label. You can filter this via `dmup_no_environment_set_message`.
 
-3. **Fallback** - Defaults to 'production' if no match is found
+The indicator is visible to users who either meet the minimum capability (defaults to `publish_posts`, filterable via `dmup_minimum_capability`) or whose username appears in the allowed users filter. This keeps visibility limited to the folks who need the context.
 
 ## License
 
