@@ -54,7 +54,7 @@ class Environment_Indicator {
 	private array $allowed_users = [];
 
 	/**
-	 * Undocumented variable
+	 * The minimum user capability required to see the environment indicator
 	 *
 	 * @var string
 	 */
@@ -149,7 +149,7 @@ class Environment_Indicator {
 	/**
 	 * Determines the current environment
 	 *
-	 * Checks the the site URL against a configurable list of environment URLs first,
+	 * Checks the site URL against a configurable list of environment URLs first,
 	 * then falls back to checking to the WP_ENVIRONMENT_TYPE constant if defined
 	 *
 	 * @return string The current environment type (e.g., 'local', 'staging', 'production')
