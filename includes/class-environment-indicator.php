@@ -164,7 +164,9 @@ class Environment_Indicator {
 			}
 		}
 
-		return 'production'; // Default to 'production' if no match is found
+		$default_message = __( 'No Environment Set', 'dont-mess-up-prod' );
+
+		return apply_filters( 'dmup_no_environment_set_message', $default_message );
 	}
 
 	/**
