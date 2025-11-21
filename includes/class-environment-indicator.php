@@ -40,16 +40,11 @@ class Environment_Indicator {
 	];
 
 	/**
-	 * Default environment URLs
+	 * Environment URLs
 	 *
 	 * @var array<string, string>
 	 */
-	private array $default_environment_urls = [
-		'local'       => 'http://example.local',
-		'development' => 'https://dev.example.com',
-		'staging'     => 'https://staging.example.com',
-		'production'  => 'https://example.com',
-	];
+	private array $environment_urls = [];
 
 	/**
 	 * Allowed user logins who can see the indicator
@@ -57,6 +52,13 @@ class Environment_Indicator {
 	 * @var array<string>
 	 */
 	private array $allowed_users = [];
+
+	/**
+	 * The minimum user capability required to see the environment indicator
+	 *
+	 * @var string
+	 */
+	private string $minimum_capability = 'publish_posts';
 
 	/**
 	 * Gets the singleton instance of the Environment_Indicator class
@@ -106,7 +108,8 @@ class Environment_Indicator {
 			return;
 		}
 
-		$environment = $this->get_current_environment();
+		$environment      = $this->get_current_environment();
+		$environment_urls = $this->get_environment_urls();
 
 		$wp_admin_bar->add_node(
 			[
@@ -123,24 +126,35 @@ class Environment_Indicator {
 				],
 			]
 		);
+
+		if ( ! empty( $environment_urls ) ) {
+			foreach ( $environment_urls as $environment_name => $url ) {
+				$wp_admin_bar->add_node(
+					[
+						'id'     => 'dmup-environment-indicator-' . sanitize_key( $environment_name ),
+						'title'  => ucwords( esc_html( $environment_name ) ),
+						'href'   => esc_url( $url ),
+						'parent' => 'dmup-environment-indicator',
+						'meta'   => [
+							'class'  => 'dmup-nav-external',
+							'target' => '_blank',
+							'rel'    => 'noopener',
+						],
+					]
+				);
+			}
+		}
 	}
 
 	/**
 	 * Determines the current environment
 	 *
-	 * Checks the WP_ENVIRONMENT_TYPE constant first, then falls back to checking
-	 * the site URL against a configurable list of environment URLs
+	 * Checks the site URL against a configurable list of environment URLs first,
+	 * then falls back to checking to the WP_ENVIRONMENT_TYPE constant if defined
 	 *
 	 * @return string The current environment type (e.g., 'local', 'staging', 'production')
 	 */
 	public function get_current_environment(): string {
-		if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
-			$wp_environment_type = WP_ENVIRONMENT_TYPE;
-			if ( $wp_environment_type ) {
-				return $wp_environment_type;
-			}
-		}
-
 		$environment_urls = $this->get_environment_urls();
 		$current_url      = get_site_url();
 
@@ -150,7 +164,16 @@ class Environment_Indicator {
 			}
 		}
 
-		return 'production'; // Default to 'production' if no match is found
+		if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+			$wp_environment_type = WP_ENVIRONMENT_TYPE;
+			if ( $wp_environment_type ) {
+				return $wp_environment_type;
+			}
+		}
+
+		$default_message = __( 'No Environment Set', 'dont-mess-up-prod' );
+
+		return apply_filters( 'dmup_no_environment_set_message', $default_message );
 	}
 
 	/**
@@ -193,7 +216,7 @@ class Environment_Indicator {
 		 *
 		 * @param array<string, string> $urls Array of environment URLs
 		 */
-		return apply_filters( 'dmup_environment_urls', $this->default_environment_urls );
+		return apply_filters( 'dmup_environment_urls', $this->environment_urls );
 	}
 
 	/**
@@ -259,10 +282,9 @@ class Environment_Indicator {
 		 * @since 0.3.0
 		 *
 		 * @param string|false $capability The user capability required to see the indicator
-		 *                                 Default is false (disabled by default)
-		 *                                 Examples: 'publish_posts' (author+), 'edit_posts' (contributor+)
+		 *                                 Default is 'publish_posts' (can also be set to false)
 		 */
-		return apply_filters( 'dmup_minimum_capability', false );
+		return apply_filters( 'dmup_minimum_capability', $this->minimum_capability );
 	}
 
 	/**
@@ -302,5 +324,3 @@ class Environment_Indicator {
 		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
-
-Environment_Indicator::get_instance();
