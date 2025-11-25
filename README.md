@@ -2,13 +2,15 @@
 
 This plugin displays a colored environment indicator in the WordPress admin bar to help developers and content managers quickly identify which environment they're working in. This helps prevent accidentally making changes to production sites when you think you're working on staging or development.
 
-## Installation (manual)
+## Installation
+
+### Manual
 
 1. Upload the plugin files to `/wp-content/plugins/dont-mess-up-prod/`
 2. Activate the plugin through the "Plugins" screen in WordPress
 3. Configure the plugin using filters (see Configuration section below)
 
-### Installation (composer)
+### Composer
 
 ```bash
 composer require davekellam/dont-mess-up-prod
@@ -17,7 +19,7 @@ wp plugin activate dont-mess-up-prod
 
 ## Configuration
 
-The plugin can be configured using WordPress filters. The recommended approach is to create a mu-plugin file in `/wp-content/mu-plugins/` with your configuration.
+The plugin can be configured using WordPress filters.
 
 ### Example Configuration (mu-plugin)
 
@@ -105,14 +107,12 @@ add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors' );
 
 The plugin detects the current environment using this priority order:
 
-1. **URL matching** – Compares the current site URL against the configured environment URLs. A match both sets the active environment and exposes a direct child link in the admin bar back to that URL.
-2. **WP_ENVIRONMENT_TYPE constant** – Set in `wp-config.php` if URL matching does not find a match:
+1. **URL matching** – Compares the current site URL against the configured environment URLs. This list will also be used to generate a list of links that appears on hover in the admin bar.
+2. **`wp_get_environment_type()`** – Which defaults to `production` and can be set via php constant:
 
     ```php
     define( 'WP_ENVIRONMENT_TYPE', 'staging' );
     ```
-
-3. **Fallback message** – If neither check succeeds, the admin bar shows the translated “No Environment Set” label. You can filter this via `dmup_no_environment_set_message`.
 
 The indicator is visible to users who either meet the minimum capability (defaults to `publish_posts`, filterable via `dmup_minimum_capability`) or whose username appears in the allowed users filter. This keeps visibility limited to the folks who need the context.
 
