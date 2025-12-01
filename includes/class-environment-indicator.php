@@ -155,11 +155,11 @@ class Environment_Indicator {
 	 * @return string The current environment type (e.g., 'local', 'staging', 'production')
 	 */
 	public function get_current_environment(): string {
-		$environment_urls = $this->get_environment_urls();
+		$environment_urls    = $this->get_environment_urls();
 		$wp_environment_type = wp_get_environment_type();
 
 		if ( ! empty( $environment_urls ) ) {
-			$current_url      = get_site_url();
+			$current_url = get_site_url();
 
 			foreach ( $environment_urls as $env => $url ) {
 				if ( str_contains( $current_url, $url ) ) {
