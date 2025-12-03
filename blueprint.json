@@ -16,6 +16,12 @@
       "options": {
         "activate": true
       }
+    },
+    {
+      "step": "defineWpConfigConsts",
+      "consts": {
+        "WP_ENVIRONTMENT_TYPE": "staging"
+      }
     }
   ]
 }
