@@ -20,7 +20,7 @@
     {
       "step": "defineWpConfigConsts",
       "consts": {
-        "WP_ENVIRONTMENT_TYPE": "staging"
+        "WP_ENVIRONMENT_TYPE": "staging"
       }
     }
   ]
