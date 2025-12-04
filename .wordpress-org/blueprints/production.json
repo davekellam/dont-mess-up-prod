@@ -22,6 +22,10 @@
       "consts": {
         "WP_ENVIRONMENT_TYPE": "production"
       }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php add_filter( 'dmup_environment_urls', function( $urls ) { return [ 'local' => 'http://example.local', 'development' => 'https://dev.example.com', 'staging' => 'https://staging.example.com', 'production' => 'https://example.com' ]; } );"
     }
   ]
 }
