@@ -1,0 +1,32 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/",
+  "steps": [
+    {
+      "step": "login",
+      "username": "admin",
+      "password": "password"
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "https://github.com/davekellam/dont-mess-up-prod/releases/latest/download/dont-mess-up-prod.zip"
+      },
+      "options": {
+        "activate": true
+      }
+    },
+    {
+      "step": "defineWpConfigConsts",
+      "consts": {
+        "WP_ENVIRONMENT_TYPE": "staging"
+      }
+    },
+    {
+      "step": "writeFile",
+      "path": "/wordpress/wp-content/mu-plugins/dmup-environment-urls.php",
+      "data": "<?php\n/**\n * Plugin Name: DMUP Environment URLs\n * Description: Sets custom environment URLs for Don't Mess Up Prod\n */\n\nadd_filter( 'dmup_environment_urls', function( $urls ) {\n    return [\n        'local'       => 'http://example.local',\n        'development' => 'https://dev.example.com',\n        'staging'     => 'https://staging.example.com',\n        'production'  => 'https://example.com',\n    ];\n} );\n"
+    }
+  ]
+}
