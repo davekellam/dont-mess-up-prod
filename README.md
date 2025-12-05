@@ -6,7 +6,7 @@ This plugin displays a colored environment indicator in the WordPress admin bar 
 
 See the plugin in action:
 
-- [**Local**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/local.json) – Grey 
+- [**Local**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/local.json) – Grey
 - [**Development**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/development.json) – Purple
 - [**Staging**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/staging.json) – Green
 - [**Production**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/production.json) – Red
