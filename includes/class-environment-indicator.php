@@ -329,7 +329,7 @@ class Environment_Indicator {
 				);
 			}
 		}
-		
+
 		if ( empty( $css_vars ) ) {
 			return '';
 		}
