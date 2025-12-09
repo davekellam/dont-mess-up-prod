@@ -22,6 +22,7 @@ jobs:
           
           # Copy production files only
           cp -r includes release/dont-mess-up-prod/
+          cp -r assets release/dont-mess-up-prod/
           cp dont-mess-up-prod.php release/dont-mess-up-prod/
           cp README.md release/dont-mess-up-prod/
           cp LICENSE.md release/dont-mess-up-prod/

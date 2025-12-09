@@ -89,8 +89,8 @@ class Environment_Indicator {
 	 */
 	public function add_hooks(): void {
 		add_action( 'admin_bar_menu', [ $this, 'add_environment_indicator_item' ], 999 );
-		add_action( 'admin_head', [ $this, 'add_styles' ] );
-		add_action( 'wp_head', [ $this, 'add_styles' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_styles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ] );
 	}
 
 	/**
@@ -283,39 +283,56 @@ class Environment_Indicator {
 	}
 
 	/**
-	 * Adds styles for the environment indicator
+	 * Enqueues styles for the environment indicator
 	 *
-	 * @since 0.4.0
+	 * @since 0.9.0
 	 *
 	 * @return void
 	 */
-	public function add_styles(): void {
+	public function enqueue_styles(): void {
 		if ( ! $this->current_user_can_see_indicator() ) {
 			return;
 		}
 
-		$colors = $this->get_environment_colors();
+		wp_enqueue_style(
+			'dmup-admin-bar',
+			plugins_url( 'assets/css/admin-bar.css', dirname( __FILE__ ) ),
+			[],
+			DONT_MESS_UP_PROD_VERSION
+		);
 
-		ob_start();
-		?>
-		<style id="dmup-styles">
-			#wpadminbar .dmup-environment-indicator {
-				display: inline-block;
-				font-weight: bold;
-				padding: 0 15px;	
-				height:100%;
-				text-transform: capitalize;
-			}
+		// Add inline CSS custom properties if colors have been filtered
+		$custom_css = $this->get_custom_color_css();
+		if ( ! empty( $custom_css ) ) {
+			wp_add_inline_style( 'dmup-admin-bar', $custom_css );
+		}
+	}
 
-			<?php foreach ( $colors as $environment => $color ) : ?>
-				#wpadminbar .dmup-environment-<?php echo esc_attr( $environment ); ?> {
-					background-color: <?php echo esc_attr( $color ); ?>;
-				}
-			<?php endforeach; ?>
+	/**
+	 * Generates CSS custom property overrides for filtered colors
+	 *
+	 * @since 0.9.0
+	 *
+	 * @return string CSS custom properties or empty string if using defaults
+	 */
+	private function get_custom_color_css(): string {
+		$colors         = $this->get_environment_colors();
+		$default_colors = $this->default_colors;
 
-		</style>
-		<?php
+		// Only output CSS if colors have been customized via filter
+		if ( $colors === $default_colors ) {
+			return '';
+		}
 
-		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$css_vars = [];
+		foreach ( $colors as $environment => $color ) {
+			$css_vars[] = sprintf(
+				'--dmup-color-%s: %s;',
+				esc_attr( $environment ),
+				esc_attr( $color )
+			);
+		}
+
+		return ':root { ' . implode( ' ', $css_vars ) . ' }';
 	}
 }
