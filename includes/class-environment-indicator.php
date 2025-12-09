@@ -296,7 +296,7 @@ class Environment_Indicator {
 
 		wp_enqueue_style(
 			'dmup-admin-bar',
-			plugins_url( 'assets/css/admin-bar.css', dirname( __FILE__ ) ),
+			plugins_url( 'assets/css/admin-bar.css', __DIR__ ),
 			[],
 			DONT_MESS_UP_PROD_VERSION
 		);
