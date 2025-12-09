@@ -290,7 +290,7 @@ class Environment_Indicator {
 	 * @return void
 	 */
 	public function enqueue_styles(): void {
-		if ( ! $this->current_user_can_see_indicator() ) {
+		if ( ! is_admin_bar_showing() || ! $this->current_user_can_see_indicator() ) {
 			return;
 		}
 
@@ -319,18 +319,19 @@ class Environment_Indicator {
 		$colors         = $this->get_environment_colors();
 		$default_colors = $this->default_colors;
 
-		// Only output CSS if colors have been customized via filter
-		if ( $colors === $default_colors ) {
-			return '';
-		}
-
 		$css_vars = [];
 		foreach ( $colors as $environment => $color ) {
-			$css_vars[] = sprintf(
-				'--dmup-color-%s: %s;',
-				esc_attr( $environment ),
-				esc_attr( $color )
-			);
+			if ( ! isset( $default_colors[ $environment ] ) || $default_colors[ $environment ] !== $color ) {
+				$css_vars[] = sprintf(
+					'--dmup-color-%s: %s;',
+					esc_attr( $environment ),
+					esc_attr( $color )
+				);
+			}
+		}
+		
+		if ( empty( $css_vars ) ) {
+			return '';
 		}
 
 		return ':root { ' . implode( ' ', $css_vars ) . ' }';
