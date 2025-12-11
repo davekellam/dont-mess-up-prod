@@ -23,7 +23,16 @@ Thumbs.db
 Desktop.ini
 
 # Cypress
-tests/cypress/screenshots
-tests/cypress/videos
-tests/cypress/downloads
-tests/cypress/reports
+cypress/screenshots
+cypress/videos
+cypress/downloads
+cypress/reports
+tests/mu-plugins/*.php
+!tests/mu-plugins/README.md
+
+# Node/NPM
+node_modules/
+package-lock.json
+
+# WordPress Environment
+.wp-env.override.json

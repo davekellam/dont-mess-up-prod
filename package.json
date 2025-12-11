@@ -1,0 +1,21 @@
+{
+  "name": "dont-mess-up-prod",
+  "version": "0.9.0",
+  "description": "WordPress plugin to indicate which environment you're currently using in the admin bar",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "cypress run",
+    "test:e2e:headed": "cypress run --headed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davekellam/dont-mess-up-prod.git"
+  },
+  "author": "Dave Kellam",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "cypress": "^13.6.0",
+    "@wordpress/env": "^10.0.0"
+  }
+}
