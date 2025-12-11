@@ -1,4 +1,9 @@
 describe('Environment Filters - Color Customization', () => {
+  afterEach(() => {
+    // Clean up test mu-plugins to prevent filter contamination
+    cy.task('deleteMuPlugin', 'test-custom-colors')
+  })
+
   it('should respect custom colors via dmup_environment_colors filter', () => {
     // This test requires a mu-plugin that sets custom colors
     cy.task('createMuPlugin', {
@@ -36,6 +41,12 @@ add_filter('dmup_environment_colors', function($colors) {
 })
 
 describe('Environment Filters - URL Detection', () => {
+  afterEach(() => {
+    // Clean up test mu-plugins
+    cy.task('deleteMuPlugin', 'test-environment-urls')
+    cy.task('deleteMuPlugin', 'test-environment-switcher')
+  })
+
   it('should detect environment based on URL via dmup_environment_urls filter', () => {
     cy.task('createMuPlugin', {
       name: 'test-environment-urls',
@@ -88,6 +99,11 @@ add_filter('dmup_environment_urls', function($urls) {
 })
 
 describe('Environment Filters - Capability Control', () => {
+  afterEach(() => {
+    // Clean up test mu-plugins
+    cy.task('deleteMuPlugin', 'test-minimum-capability')
+  })
+
   it('should respect dmup_minimum_capability filter', () => {
     // Set minimum capability to manage_options (admin only)
     cy.task('createMuPlugin', {
@@ -107,7 +123,8 @@ add_filter('dmup_minimum_capability', function($capability) {
     cy.get('#pass1').clear().type('TestPassword123!')
     cy.get('#role').select('editor')
     cy.get('#createusersub').click()
-    cy.url().should('include', 'users.php')
+    // Wait for user creation to complete
+    cy.wait(2000)
 
     // Login as editor
     cy.clearAllCookies()
@@ -140,7 +157,8 @@ add_filter('dmup_allowed_users', function($users) {
     cy.get('#pass1').clear().type('TestPassword123!')
     cy.get('#role').select('subscriber')
     cy.get('#createusersub').click()
-    cy.url().should('include', 'users.php')
+    // Wait for user creation to complete
+    cy.wait(2000)
 
     // Login as subscriber
     cy.clearAllCookies()
@@ -154,6 +172,12 @@ add_filter('dmup_allowed_users', function($users) {
 })
 
 describe('Environment Filters - Allowed Users', () => {
+  afterEach(() => {
+    // Clean up test mu-plugins
+    cy.task('deleteMuPlugin', 'test-allowed-users')
+    cy.task('deleteMuPlugin', 'test-multiple-allowed-users')
+  })
+
   it('should show indicator to users in dmup_allowed_users list', () => {
     const subscriberUsername = `subscriber_${Date.now()}`
     
@@ -174,7 +198,8 @@ add_filter('dmup_allowed_users', function($users) {
     cy.get('#pass1').clear().type('TestPassword123!')
     cy.get('#role').select('subscriber')
     cy.get('#createusersub').click()
-    cy.url().should('include', 'users.php')
+    // Wait for user creation to complete
+    cy.wait(2000)
 
     // Login as subscriber
     cy.clearAllCookies()

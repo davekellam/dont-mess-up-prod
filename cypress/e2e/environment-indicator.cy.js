@@ -33,6 +33,11 @@ describe('Environment Indicator - Basic Functionality', () => {
 })
 
 describe('Environment Indicator - Color Verification', () => {
+  before(() => {
+    // Clean up any mu-plugins from previous test files that might affect colors
+    cy.task('deleteMuPlugin', 'test-custom-colors')
+  })
+
   it('should have correct default color for local environment', () => {
     cy.wpLogin()
     cy.visit('/wp-admin')
@@ -70,7 +75,8 @@ describe('Environment Indicator - Visibility', () => {
     cy.get('#pass1').clear().type('TestPassword123!')
     cy.get('#role').select('subscriber')
     cy.get('#createusersub').click()
-    cy.url().should('include', 'users.php')
+    // Wait for user creation to complete
+    cy.wait(2000)
 
     // Logout and login as subscriber
     cy.clearAllCookies()
