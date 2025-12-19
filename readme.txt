@@ -12,8 +12,7 @@ Displays a colored environment indicator in the admin bar.
 
 == Description ==
 
-Don't Mess Up Prod helps developers and content managers quickly identify which environment they're working in by displaying a colored indicator in the WordPress admin bar. 
-Hopefully this prevents messing up production 😅
+Don't Mess Up Prod helps developers and content managers quickly identify which environment they're working in by displaying a colored indicator in the WordPress admin bar. Hopefully this prevents messing up production 😅
 
 == Installation ==
 
