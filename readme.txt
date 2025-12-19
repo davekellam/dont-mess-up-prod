@@ -1,6 +1,6 @@
 === Don't Mess Up Prod ===
 Contributors: eightface
-Tags: environment, admin bar, development, staging, production, debug
+Tags: environment, admin bar, development, debug
 Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 8.0
