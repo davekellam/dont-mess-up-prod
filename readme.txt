@@ -1,10 +1,10 @@
 === Don't Mess Up Prod ===
 Contributors: eightface
-Tags: environment, admin bar, development, staging, production
+Tags: environment, admin bar, development, staging, production, debug
 Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.9.0
+Stable tag: 0.9.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,8 @@ Displays a colored environment indicator in the admin bar.
 
 == Description ==
 
-Don't Mess Up Prod helps developers and content managers quickly identify which environment they're working in by displaying a colored indicator in the WordPress admin bar. This simple visual cue prevents the common and costly mistake of accidentally making changes to production sites when you think you're working on staging or development.
+Don't Mess Up Prod helps developers and content managers quickly identify which environment they're working in by displaying a colored indicator in the WordPress admin bar. 
+Hopefully this prevents messing up production 😅
 
 == Installation ==
 
@@ -98,19 +99,17 @@ add_filter( 'dmup_environment_urls', function() {
 
 == Changelog ==
 
+= 0.9.1 =
+* Initial wordpress.org release
+
 = 0.9.0 =
-* Refactored to use external stylesheet with CSS variables
-* Improved performance with proper WordPress enqueue system
-* Added CSS custom property support for easier color customization
-* Updated release workflow to include assets folder
+* Refactored to use external stylesheet with CSS variables and enqueue system
+* Added CSS custom property support
 
 = 0.8.1 =
 * Added WordPress Playground blueprints for live demos
-* Improved release automation with GitHub Actions
-* Updated documentation with Playground links
 
 = 0.8.0 =
-* Initial public release
 * Color-coded environment indicators
 * Environment switcher menu
 * Customizable via WordPress filters
@@ -118,8 +117,11 @@ add_filter( 'dmup_environment_urls', function() {
 
 == Upgrade Notice ==
 
+= 0.9.1 =
+WordPress.org deployment automation and updated Playground blueprints.
+
 = 0.9.0 =
-Improved performance with external stylesheet. Fully backward compatible with 0.8.x.
+Added stylesheet instead of inline css
 
 == Configuration ==
 
