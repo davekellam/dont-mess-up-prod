@@ -11,7 +11,7 @@
       "step": "installPlugin",
       "pluginData": {
         "resource": "url",
-        "url": "https://github.com/davekellam/dont-mess-up-prod/releases/latest/download/dont-mess-up-prod.zip"
+        "url": "https://downloads.wordpress.org/plugin/dont-mess-up-prod.zip"
       },
       "options": {
         "activate": true
