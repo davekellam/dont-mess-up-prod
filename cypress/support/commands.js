@@ -5,25 +5,30 @@ Cypress.Commands.add('wpLogin', (username, password) => {
   const user = username || Cypress.env('wpUsername')
   const pass = password || Cypress.env('wpPassword')
   
-  cy.visit('/wp-login.php')
-  cy.get('body').then(($body) => {
-    // Check if already logged in (might redirect to admin)
-    if (!$body.find('#user_login').length) {
-      cy.log('Already logged in, visiting admin')
-      cy.visit('/wp-admin')
-      return
+  cy.getCookies().then(cookies => {
+    let hasMatch = false
+    cookies.forEach((cookie) => {
+      if (cookie.name.substr(0, 20) === 'wordpress_logged_in_') {
+        hasMatch = true
+      }
+    })
+    
+    if (!hasMatch) {
+      cy.visit('/wp-login.php').wait(1000)
+      cy.get('#user_login').type(user)
+      cy.get('#user_pass').type(`${pass}{enter}`)
     }
-    
-    cy.get('#user_login').clear().type(user)
-    cy.get('#user_pass').clear().type(pass)
-    cy.get('#wp-submit').click()
-    
-    // Wait a bit for the login to process
-    cy.wait(1000)
-    
-    // Check if we're logged in by visiting admin and checking for admin bar
-    cy.visit('/wp-admin', { failOnStatusCode: false })
-    cy.get('body', { timeout: 10000 }).should('exist')
+  })
+})
+
+/**
+ * Cypress custom command to log out of WordPress
+ */
+Cypress.Commands.add('wpLogout', () => {
+  cy.getCookies().then(cookies => {
+    cookies.forEach(cookie => {
+      cy.clearCookie(cookie.name)
+    })
   })
 })
 
