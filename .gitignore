@@ -30,7 +30,6 @@ cypress/reports
 
 # Node/NPM
 node_modules/
-package-lock.json
 
 # WordPress Environment
 .wp-env.override.json

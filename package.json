@@ -15,7 +15,7 @@
   "author": "Dave Kellam",
   "license": "GPL-2.0-or-later",
   "devDependencies": {
-    "cypress": "^15.8.0",
-    "@wordpress/env": "^10.37.0"
+    "cypress": "15.8.2",
+    "@wordpress/env": "10.37.0"
   }
 }
