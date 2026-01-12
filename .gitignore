@@ -27,8 +27,6 @@ cypress/screenshots
 cypress/videos
 cypress/downloads
 cypress/reports
-tests/mu-plugins/*.php
-!tests/mu-plugins/README.md
 
 # Node/NPM
 node_modules/

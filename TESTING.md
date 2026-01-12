@@ -25,7 +25,6 @@ This will:
 - Start a WordPress instance at `http://localhost:8888`
 - Install the plugin automatically
 - Set up the test database
-- Map the `tests/mu-plugins` directory for filter testing
 
 3. **Wait for WordPress to be ready** (usually takes 30-60 seconds on first run)
 
@@ -59,46 +58,34 @@ npm run test:e2e:headed
 
 ### Test Files
 
-- **`cypress/e2e/environment-indicator.cy.js`** - Tests for basic indicator functionality and visibility across all four environments
-- **`cypress/e2e/filters.cy.js`** - Tests for WordPress filter customization (colors, URLs, capabilities, allowed users)
+- **`cypress/e2e/environment-indicator.cy.js`** - Tests for indicator functionality, styling, and visibility
 
 ### Custom Commands
 
 Located in `cypress/support/commands.js`:
 
 - `cy.wpLogin(username, password)` - Log in to WordPress admin
-- `cy.checkEnvironmentIndicator(environment, color)` - Verify indicator exists with correct environment and color
-- `cy.checkEnvironmentSwitcher(environments)` - Verify environment switcher menu
-- `cy.createUser(username, role)` - Create a test user with specific role
-
-### Custom Tasks
-
-Located in `cypress.config.js`:
-
-- `cy.task('createMuPlugin', { name, content })` - Create an mu-plugin for testing filters
-- `cy.task('deleteMuPlugin', name)` - Delete a test mu-plugin
-- `cy.task('setEnvironmentType', envType)` - Set WP_ENVIRONMENT_TYPE constant
+- `cy.wpLogout()` - Log out of WordPress
+- `cy.checkEnvironmentIndicator(environment, color)` - Verify indicator exists with correct environment and optional color
 
 ## Test Coverage
 
-### Environment Indicator Tests
+### What We Test
 
 ✅ Admin bar visibility
 ✅ Frontend visibility when logged in  
 ✅ Hidden when logged out
-✅ All four environments (local, development, staging, production)
-✅ Correct colors for each environment
-✅ Visibility based on user capabilities
+✅ Default local environment display
+✅ Correct default colors
+✅ CSS custom properties defined
 ✅ Environment name capitalization
+✅ Correct CSS classes applied
 
-### Filter Tests
+### What We Don't Test in E2E
 
-✅ `dmup_environment_colors` - Custom color overrides
-✅ `dmup_environment_urls` - URL-based environment detection  
-✅ `dmup_environment_urls` - Environment switcher menu
-✅ `dmup_minimum_capability` - Capability-based access control
-✅ `dmup_allowed_users` - Username-based access control
-✅ CSS custom properties usage
+❌ Filter API (colors, URLs, capabilities) - These are better suited for PHP unit tests
+❌ Multiple environment types - Would require restarting wp-env with different configs
+❌ User role/permission variations - Complex session management in Cypress
 
 ## Cleaning Up
 
@@ -126,11 +113,6 @@ npx wp-env destroy
 - Clear Cypress cache: `npx cypress cache clear`
 - Verify plugin is activated in wp-admin
 
-**Filter tests not working:**
-- Check that `tests/mu-plugins` directory exists
-- Verify `.wp-env.json` has the correct mappings
-- Restart wp-env after changing mappings
-
 ## CI/CD Integration
 
 To run tests in CI (GitHub Actions, etc.):
@@ -150,9 +132,8 @@ To run tests in CI (GitHub Actions, etc.):
 
 1. Create a new test file in `cypress/e2e/`
 2. Use the custom commands for common operations
-3. Use `cy.task()` to create mu-plugins for testing filters
-4. Follow the existing test patterns for consistency
-5. Run `npm run cy:open` to develop tests interactively
+3. Follow the existing test patterns for consistency
+4. Run `npm run cy:open` to develop tests interactively
 
 ## Additional Resources
 

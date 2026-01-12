@@ -33,7 +33,7 @@ Cypress.Commands.add('wpLogout', () => {
 })
 
 /**
- * Custom command to check if environment indicator exists
+ * Custom command to check if environment indicator exists with correct environment
  */
 Cypress.Commands.add('checkEnvironmentIndicator', (environment, color) => {
   cy.get('#wp-admin-bar-dmup-environment-indicator')
@@ -51,36 +51,4 @@ Cypress.Commands.add('checkEnvironmentIndicator', (environment, color) => {
     cy.get(`#wp-admin-bar-dmup-environment-indicator.dmup-environment-${environment}`)
       .should('have.css', 'background-color', color)
   }
-})
-
-/**
- * Custom command to check environment switcher menu
- */
-Cypress.Commands.add('checkEnvironmentSwitcher', (environments) => {
-  cy.get('#wp-admin-bar-dmup-environment-indicator').click()
-  
-  environments.forEach(env => {
-    cy.get(`#wp-admin-bar-dmup-environment-indicator-${env}`)
-      .should('exist')
-      .and('be.visible')
-  })
-})
-
-/**
- * Custom command to create a test user with specific role
- */
-Cypress.Commands.add('createUser', (username, role = 'editor') => {
-  cy.wpLogin()
-  cy.visit('/wp-admin/user-new.php')
-  cy.get('#user_login').type(username)
-  cy.get('#email').type(`${username}@example.com`)
-  
-  // Use the "Show password" button instead of typing in hidden pass2
-  cy.get('#pass1').type('TestPassword123!')
-  cy.get('.wp-generate-pw').click() // Click "Set password" button if needed
-  cy.get('#pass1').clear().type('TestPassword123!')
-  
-  cy.get('#role').select(role)
-  cy.get('#createusersub').click()
-  cy.url().should('include', 'users.php')
 })

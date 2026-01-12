@@ -1,53 +1,45 @@
-# Cypress Tests - TODO
+# Cypress Tests - Future Improvements
 
-This document tracks tests that need to be added or fixed for the Don't Mess Up Prod plugin.
+This document tracks potential future enhancements to the test suite.
 
-## Tests Removed (Need to be Fixed & Re-added)
+## Potential Additions
 
-### 1. User Visibility Tests
+### 1. PHP Unit Tests for Filter API
 
-**Issue**: Session management and user creation timing issues
+The WordPress filter API (colors, URLs, capabilities, allowed users) is better tested with PHP unit tests rather than E2E tests. Consider adding PHPUnit tests for:
 
-#### Subscriber Visibility Test
-**Location**: `environment-indicator.cy.js` - Visibility describe block
+- `dmup_environment_colors` filter
+- `dmup_environment_urls` filter
+- `dmup_minimum_capability` filter
+- `dmup_allowed_users` filter
+- Environment detection logic
 
-**What it should test**:
-- Create a subscriber user via WordPress admin
-- Login as that subscriber
-- Verify the environment indicator is NOT visible (subscribers lack `publish_posts` capability)
+### 2. Multiple Environment E2E Tests
 
-**Current Problems**:
-- User creation form not redirecting to `users.php` after submission
-- Login fails after clearing cookies and session storage
-- Timeout issues with new user authentication
+Testing different environment types (development, staging, production) would require:
+- Modifying `WP_ENVIRONMENT_TYPE` in `.wp-env.json`
+- Restarting wp-env between test runs
+- Verifying correct colors for each environment
 
-**Fix Required**:
-- Implement proper `cy.session()` with validation
-- Add explicit waits for user creation success message
-- Verify user exists before attempting login
+This is possible but adds complexity. Current approach focuses on testing with the default local environment.
 
-**Code Skeleton**:
-```javascript
-it('should not be visible to subscribers by default', () => {
-  cy.wpLogin()
-  const subscriberUsername = `subscriber_${Date.now()}`
-  
-  // Create subscriber with proper waits
-  cy.visit('/wp-admin/user-new.php')
-  cy.get('#user_login').type(subscriberUsername)
-  cy.get('#email').type(`${subscriberUsername}@example.com`)
-  cy.get('#pass1').clear().type('TestPassword123!')
-  cy.get('#role').select('subscriber')
-  cy.get('#createusersub').click()
-  cy.contains('New user created').should('be.visible') // Wait for success
-  
-  // Use cy.session for reliable login
-  cy.wpLogin(subscriberUsername, 'TestPassword123!')
-  cy.visit('/wp-admin')
-  
-  cy.get('#wp-admin-bar-dmup-environment-indicator').should('not.exist')
-})
-```
+### 3. User Role/Permission Tests
+
+Testing visibility for different user roles (subscriber, editor, etc.) requires:
+- Creating users programmatically
+- Managing session cookies properly
+- Complex test isolation
+
+These tests are valuable but add significant complexity. Consider if the value justifies the maintenance overhead.
+
+## Notes
+
+The current test suite intentionally focuses on:
+- Core functionality with default settings
+- What users see without customization
+- Simple, reliable, fast tests
+
+This provides good coverage while maintaining test simplicity and speed.
 
 ---
 
