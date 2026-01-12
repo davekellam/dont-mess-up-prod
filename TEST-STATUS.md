@@ -15,8 +15,6 @@ Created a streamlined Cypress E2E testing framework for the Don't Mess Up Prod p
 - ✅ Correct default color for local environment
 - ✅ Apply correct CSS class for environment type
 - ✅ Use CSS custom properties for all environment colors
-- ✅ Visible to admin users
-- ✅ Visible on both admin and frontend when logged in
 
 ## Test Infrastructure
 

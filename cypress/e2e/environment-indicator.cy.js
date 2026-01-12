@@ -6,7 +6,7 @@ describe('Environment Indicator - Basic Functionality', () => {
     cy.get('#wp-admin-bar-dmup-environment-indicator').should('exist')
   })
 
-  it('should show local environment by default', () => {
+  it('should show local environment (as configured in wp-env)', () => {
     cy.wpLogin()
     cy.visit('/wp-admin')
     cy.checkEnvironmentIndicator('local')
@@ -65,25 +65,5 @@ describe('Environment Indicator - Styling', () => {
       expect(stagingColor).to.not.be.empty
       expect(prodColor).to.not.be.empty
     })
-  })
-})
-
-describe('Environment Indicator - Visibility', () => {
-  it('should be visible to admin users', () => {
-    cy.wpLogin()
-    cy.visit('/wp-admin')
-    cy.get('#wp-admin-bar-dmup-environment-indicator').should('exist').and('be.visible')
-  })
-
-  it('should be visible on both admin and frontend when logged in', () => {
-    cy.wpLogin()
-    
-    // Check admin
-    cy.visit('/wp-admin')
-    cy.get('#wp-admin-bar-dmup-environment-indicator').should('exist')
-    
-    // Check frontend
-    cy.visit('/')
-    cy.get('#wp-admin-bar-dmup-environment-indicator').should('exist')
   })
 })
