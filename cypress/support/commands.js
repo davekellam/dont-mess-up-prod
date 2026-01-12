@@ -8,7 +8,7 @@ Cypress.Commands.add('wpLogin', (username, password) => {
   cy.getCookies().then(cookies => {
     let hasMatch = false
     cookies.forEach((cookie) => {
-      if (cookie.name.substr(0, 20) === 'wordpress_logged_in_') {
+      if (cookie.name.startsWith('wordpress_logged_in_')) {
         hasMatch = true
       }
     })
