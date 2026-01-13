@@ -2,7 +2,7 @@
     "name": "davekellam/dont-mess-up-prod",
     "description": "A WordPress plugin to indicate which environment you're currently using in the admin bar",
     "type": "wordpress-plugin",
-    "version": "0.9.1",
+    "version": "1.0.0-alpha",
     "keywords": [
         "wordpress",
         "plugin"
