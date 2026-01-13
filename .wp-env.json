@@ -1,10 +1,10 @@
 {
-  "core": "https://downloads.wordpress.org/release/wordpress-6.7.1.zip",
+  "core": "WordPress/WordPress",
   "plugins": [
     "."
   ],
   "themes": [
-    "https://downloads.wordpress.org/theme/twentytwentyfour.1.2.zip"
+    "WordPress/twentytwentyfive"
   ],
   "port": 8888,
   "config": {
