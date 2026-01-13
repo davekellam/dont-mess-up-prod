@@ -1,0 +1,53 @@
+name: E2E Tests - Cypress
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    name: Cypress E2E Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install npm dependencies
+      run: npm ci --include=dev
+
+    - name: Start WordPress environment
+      run: npx wp-env start
+
+    - name: Wait for WordPress to be ready
+      run: |
+        timeout 60 bash -c 'until curl -s http://localhost:8888 > /dev/null; do sleep 2; done' || exit 1
+
+    - name: Run Cypress tests
+      run: npm run test:e2e
+
+    - name: Upload screenshots on failure
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: cypress/screenshots
+        if-no-files-found: ignore
+
+    - name: Stop WordPress environment
+      if: always()
+      run: npx wp-env stop
