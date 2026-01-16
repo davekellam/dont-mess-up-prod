@@ -183,6 +183,17 @@ class Environment_Indicator {
 	}
 
 	/**
+	 * Gets the default environment colors without filters
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array<string, string> Default environment colors array
+	 */
+	public function get_default_colors(): array {
+		return $this->default_colors;
+	}
+
+	/**
 	 * Gets environment colors with filter support
 	 *
 	 * @return array<string, string> Environment colors array

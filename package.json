@@ -1,6 +1,6 @@
 {
   "name": "dont-mess-up-prod",
-  "version": "0.9.1",
+  "version": "1.0.0-alpha",
   "description": "WordPress plugin to indicate which environment you're currently using in the admin bar",
   "scripts": {
     "cy:open": "cypress open",
