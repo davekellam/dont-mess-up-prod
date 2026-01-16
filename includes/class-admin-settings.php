@@ -40,13 +40,13 @@ class Admin_Settings {
 	/**
 	 * Environment definitions
 	 *
-	 * @var array<string, string>
+	 * @var array<string>
 	 */
 	private array $environments = [
-		'local'       => 'Local',
-		'development' => 'Development',
-		'staging'     => 'Staging',
-		'production'  => 'Production',
+		'local',
+		'development',
+		'staging',
+		'production',
 	];
 
 	/**
@@ -104,7 +104,7 @@ class Admin_Settings {
 		$default_colors = Environment_Indicator::get_instance()->get_default_colors();
 
 		// Register settings for each environment
-		foreach ( $this->environments as $env => $label ) {
+		foreach ( $this->environments as $env ) {
 			// Register color setting
 			register_setting(
 				self::SETTINGS_GROUP,
@@ -137,10 +137,10 @@ class Admin_Settings {
 		);
 
 		// Add fields for each environment
-		foreach ( $this->environments as $env => $label ) {
+		foreach ( $this->environments as $env ) {
 			add_settings_field(
 				"dmup_{$env}_settings",
-				$label,
+				ucwords( $env ),
 				[ $this, 'render_environment_fields' ],
 				self::PAGE_SLUG,
 				'dmup_environments_section',
@@ -240,7 +240,7 @@ class Admin_Settings {
 	 * @return array Modified colors array
 	 */
 	public function apply_saved_colors( array $colors ): array {
-		foreach ( $this->environments as $env => $label ) {
+		foreach ( $this->environments as $env ) {
 			$saved_color = get_option( "dmup_color_{$env}" );
 			if ( $saved_color ) {
 				$colors[ $env ] = $saved_color;
@@ -257,7 +257,7 @@ class Admin_Settings {
 	 * @return array Modified URLs array
 	 */
 	public function apply_saved_urls( array $urls ): array {
-		foreach ( $this->environments as $env => $label ) {
+		foreach ( $this->environments as $env ) {
 			$saved_url = get_option( "dmup_url_{$env}" );
 			if ( $saved_url ) {
 				$urls[ $env ] = $saved_url;
