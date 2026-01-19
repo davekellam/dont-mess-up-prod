@@ -22,7 +22,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "davekellam/phpcs-wp": "dev-main"
+        "davekellam/phpcs-wp": "dev-main",
+        "phpunit/phpunit": "^9.0"
     },
     "config": {
 		"allow-plugins": {
@@ -32,6 +33,8 @@
     },
     "scripts": {
         "lint": "phpcs --standard=phpcs.xml .",
-        "lint-fix": "phpcbf ."
+        "lint-fix": "phpcbf .",
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html build/coverage"
     }
 }

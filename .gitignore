@@ -33,3 +33,7 @@ node_modules/
 
 # WordPress Environment
 .wp-env.override.json
+
+# PHPUnit
+.phpunit.result.cache
+build/coverage/
