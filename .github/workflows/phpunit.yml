@@ -1,0 +1,63 @@
+name: PHPUnit Tests
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  phpunit:
+    name: PHPUnit Unit Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['8.0', '8.1', '8.2']
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        tools: composer:v2
+        coverage: xdebug
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/composer
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Run PHPUnit tests
+      run: composer run test
+
+    - name: Run PHPUnit with coverage
+      if: matrix.php-version == '8.2'
+      run: composer run test-coverage
+
+    - name: Upload coverage reports to Codecov
+      if: matrix.php-version == '8.2'
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./build/coverage/coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
