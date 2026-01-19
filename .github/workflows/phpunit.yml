@@ -30,7 +30,7 @@ jobs:
       with:
         php-version: ${{ matrix.php-version }}
         tools: composer:v2
-        coverage: xdebug
+        coverage: none
 
     - name: Cache Composer dependencies
       uses: actions/cache@v4
@@ -48,16 +48,3 @@ jobs:
 
     - name: Run PHPUnit tests
       run: composer run test
-
-    - name: Run PHPUnit with coverage
-      if: matrix.php-version == '8.2'
-      run: composer run test-coverage
-
-    - name: Upload coverage reports to Codecov
-      if: matrix.php-version == '8.2'
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./build/coverage/coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
