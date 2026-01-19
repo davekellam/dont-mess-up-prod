@@ -34,7 +34,7 @@ class Test_Environment_Indicator extends WP_UnitTestCase {
 	 */
 	public function test_dmup_environment_colors_filter() {
 		// Get default colors
-		$default_colors = $this->indicator->get_default_colors();
+		$default_colors = $this->indicator->get_environment_colors();
 		
 		// Test without filter
 		$colors = $this->indicator->get_environment_colors();
