@@ -7,11 +7,6 @@
  * @package DontMessUpProd\Tests
  */
 
-// Define plugin constants
-if ( ! defined( 'DONT_MESS_UP_PROD_VERSION' ) ) {
-	define( 'DONT_MESS_UP_PROD_VERSION', '1.0.0' );
-}
-
 // Load the plugin
 require_once __DIR__ . '/../includes/class-environment-indicator.php';
 
