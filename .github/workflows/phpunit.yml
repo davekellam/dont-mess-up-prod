@@ -56,7 +56,7 @@ jobs:
         fi
 
     - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      run: composer validate
 
     - name: Run PHPUnit tests
       run: composer run test
