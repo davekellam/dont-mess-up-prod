@@ -2,7 +2,6 @@
     "name": "davekellam/dont-mess-up-prod",
     "description": "A WordPress plugin to indicate which environment you're currently using in the admin bar",
     "type": "wordpress-plugin",
-    "version": "0.9.1",
     "keywords": [
         "wordpress",
         "plugin"
@@ -22,7 +21,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "davekellam/phpcs-wp": "dev-main"
+        "davekellam/phpcs-wp": "dev-main",
+        "phpunit/phpunit": "^9.6"
     },
     "config": {
 		"allow-plugins": {
@@ -32,6 +32,7 @@
     },
     "scripts": {
         "lint": "phpcs --standard=phpcs.xml .",
-        "lint-fix": "phpcbf ."
+        "lint-fix": "phpcbf .",
+        "test": "vendor/bin/phpunit"
     }
 }

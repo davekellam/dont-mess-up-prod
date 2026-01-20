@@ -1,0 +1,66 @@
+name: PHPUnit Tests
+
+permissions:
+  contents: read
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  phpunit:
+    name: PHPUnit Unit Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['8.2', '8.3', '8.4']
+        include:
+          - php-version: '8.4'
+            install-dev: true
+          - php-version: '8.3'
+            install-dev: true
+          - php-version: '8.2'
+            install-dev: true
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        tools: composer:v2
+        coverage: none
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/composer
+        key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.json') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-${{ matrix.php-version }}-
+          ${{ runner.os }}-composer-
+
+    - name: Install Composer dependencies
+      run: |
+        if [ "${{ matrix.install-dev }}" = "true" ]; then
+          composer install --prefer-dist --no-progress
+        else
+          composer install --prefer-dist --no-progress --no-dev
+        fi
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Run PHPUnit tests
+      if: matrix.install-dev
+      run: composer run test
