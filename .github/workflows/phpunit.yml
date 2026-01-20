@@ -62,4 +62,5 @@ jobs:
       run: composer validate
 
     - name: Run PHPUnit tests
+      if: matrix.install-dev
       run: composer run test

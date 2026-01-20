@@ -33,6 +33,6 @@
     "scripts": {
         "lint": "phpcs --standard=phpcs.xml .",
         "lint-fix": "phpcbf .",
-        "test": "phpunit"
+        "test": "vendor/bin/phpunit"
     }
 }
