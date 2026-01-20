@@ -16,13 +16,13 @@
         }
     ],
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
         "davekellam/phpcs-wp": "dev-main",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.6"
     },
     "config": {
 		"allow-plugins": {

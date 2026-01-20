@@ -101,7 +101,6 @@ class Test_Environment_Indicator extends WP_UnitTestCase {
 		// Use reflection to test private method
 		$reflection = new ReflectionClass( $this->indicator );
 		$method = $reflection->getMethod( 'get_minimum_capability' );
-		$method->setAccessible( true );
 
 		// Test without filter
 		$capability = $method->invoke( $this->indicator );
@@ -181,7 +180,6 @@ class Test_Environment_Indicator extends WP_UnitTestCase {
 		// Test private method using reflection
 		$reflection = new ReflectionClass( $this->indicator );
 		$method = $reflection->getMethod( 'get_custom_color_css' );
-		$method->setAccessible( true );
 
 		$css = $method->invoke( $this->indicator );
 
