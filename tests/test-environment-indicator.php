@@ -207,25 +207,30 @@ class Test_Environment_Indicator extends WP_UnitTestCase {
 		$mock_admin_bar = $this->createMock( \WP_Admin_Bar::class );
 
 		// Expect main node + 2 child nodes = 3 total calls
+		$calls = [];
 		$mock_admin_bar->expects( $this->exactly( 3 ) )
 			->method( 'add_node' )
-			->withConsecutive(
-				[ $this->callback( function( $args ) {
-					return $args['id'] === 'dmup-environment-indicator' &&
-						   isset( $args['title'] ) &&
-						   $args['parent'] === 'top-secondary';
-				} ) ],
-				[ $this->callback( function( $args ) {
-					return $args['id'] === 'dmup-environment-indicator-staging' &&
-						   strpos( $args['title'], 'Staging' ) !== false;
-				} ) ],
-				[ $this->callback( function( $args ) {
-					return $args['id'] === 'dmup-environment-indicator-production' &&
-						   strpos( $args['title'], 'Production' ) !== false;
-				} ) ]
-			);
+			->willReturnCallback( function( $args ) use ( &$calls ) {
+				$calls[] = $args;
+			} );
 
 		// Call the method being tested
 		$this->indicator->add_environment_indicator_item( $mock_admin_bar );
+
+		// Verify that three nodes were added with the expected properties.
+		$this->assertCount( 3, $calls );
+
+		$main_node = $calls[0];
+		$this->assertSame( 'dmup-environment-indicator', $main_node['id'] );
+		$this->assertArrayHasKey( 'title', $main_node );
+		$this->assertSame( 'top-secondary', $main_node['parent'] );
+
+		$staging_node = $calls[1];
+		$this->assertSame( 'dmup-environment-indicator-staging', $staging_node['id'] );
+		$this->assertNotFalse( strpos( $staging_node['title'], 'Staging' ) );
+
+		$production_node = $calls[2];
+		$this->assertSame( 'dmup-environment-indicator-production', $production_node['id'] );
+		$this->assertNotFalse( strpos( $production_node['title'], 'Production' ) );
 	}
 }
