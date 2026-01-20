@@ -166,4 +166,66 @@ class Test_Environment_Indicator extends WP_UnitTestCase {
 		$matched_environment = $this->indicator->get_current_environment();
 		$this->assertEquals( 'local', $matched_environment );
 	}
+
+	/**
+	 * Test that filtered colors generate correct CSS custom properties
+	 */
+	public function test_filtered_colors_generate_css_custom_properties() {
+		// Add filter to modify colors
+		add_filter( 'dmup_environment_colors', function( $colors ) {
+			$colors['production'] = '#ff0000';
+			$colors['custom'] = '#00ff00';
+			return $colors;
+		} );
+
+		// Test private method using reflection
+		$reflection = new ReflectionClass( $this->indicator );
+		$method = $reflection->getMethod( 'get_custom_color_css' );
+		$method->setAccessible( true );
+
+		$css = $method->invoke( $this->indicator );
+
+		// Verify CSS custom properties are generated
+		$this->assertStringContainsString( '--dmup-color-production: #ff0000;', $css );
+		$this->assertStringContainsString( '--dmup-color-custom: #00ff00;', $css );
+		$this->assertStringContainsString( ':root {', $css );
+	}
+
+	/**
+	 * Test that filtered URLs create admin bar nodes correctly
+	 */
+	public function test_filtered_urls_create_admin_bar_nodes() {
+		// Add filter to set URLs
+		add_filter( 'dmup_environment_urls', function( $urls ) {
+			return [
+				'staging' => 'https://staging.example.com',
+				'production' => 'https://example.com'
+			];
+		} );
+
+		// Mock WP_Admin_Bar to verify add_node calls
+		$mock_admin_bar = $this->createMock( \WP_Admin_Bar::class );
+
+		// Expect main node + 2 child nodes = 3 total calls
+		$mock_admin_bar->expects( $this->exactly( 3 ) )
+			->method( 'add_node' )
+			->withConsecutive(
+				[ $this->callback( function( $args ) {
+					return $args['id'] === 'dmup-environment-indicator' &&
+						   isset( $args['title'] ) &&
+						   $args['parent'] === 'top-secondary';
+				} ) ],
+				[ $this->callback( function( $args ) {
+					return $args['id'] === 'dmup-environment-indicator-staging' &&
+						   strpos( $args['title'], 'Staging' ) !== false;
+				} ) ],
+				[ $this->callback( function( $args ) {
+					return $args['id'] === 'dmup-environment-indicator-production' &&
+						   strpos( $args['title'], 'Production' ) !== false;
+				} ) ]
+			);
+
+		// Call the method being tested
+		$this->indicator->add_environment_indicator_item( $mock_admin_bar );
+	}
 }
