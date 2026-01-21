@@ -3,7 +3,7 @@
  * Plugin Name:       Don't Mess Up Prod
  * Plugin URI:        https://github.com/davekellam/dont-mess-up-prod
  * Description:       Displays the current environment in the admin bar
- * Version:           0.9.1
+ * Version:           1.0.0
  * Requires at least: 6.7
  * Requires PHP:      8.0
  * Author:            Dave Kellam
@@ -19,7 +19,12 @@
 
 namespace DontMessUpProd;
 
-define( 'DONT_MESS_UP_PROD_VERSION', '0.9.1' );
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
+
+define( 'DONT_MESS_UP_PROD_VERSION', '1.0.0' );
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-environment-indicator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-admin-settings.php';
+
 Environment_Indicator::get_instance();
+Admin_Settings::get_instance();

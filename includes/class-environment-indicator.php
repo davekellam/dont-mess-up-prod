@@ -10,6 +10,8 @@
 
 namespace DontMessUpProd;
 
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
+
 use WP_Admin_Bar;
 
 /**
@@ -180,6 +182,17 @@ class Environment_Indicator {
 	public function get_environment_color( string $environment ): string {
 		$colors = $this->get_environment_colors();
 		return $colors[ $environment ] ?? $colors['local'];
+	}
+
+	/**
+	 * Gets the default environment colors without filters
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array<string, string> Default environment colors array
+	 */
+	public function get_default_colors(): array {
+		return $this->default_colors;
 	}
 
 	/**
