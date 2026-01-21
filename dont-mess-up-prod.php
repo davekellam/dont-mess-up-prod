@@ -25,7 +25,4 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-environment-indicator
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-admin-settings.php';
 
 Environment_Indicator::get_instance();
-
-if ( is_admin() ) {
-	Admin_Settings::get_instance();
-}
+Admin_Settings::get_instance();
