@@ -10,12 +10,16 @@ on:
   pull_request:
     branches:
       - main
+    types: [labeled, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
   e2e:
     name: Cypress E2E Tests
     runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'run-e2e')
 
     steps:
     - name: Checkout
