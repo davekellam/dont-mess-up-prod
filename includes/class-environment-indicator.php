@@ -10,6 +10,8 @@
 
 namespace DontMessUpProd;
 
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
+
 use WP_Admin_Bar;
 
 /**

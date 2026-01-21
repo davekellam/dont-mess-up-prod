@@ -19,6 +19,8 @@
 
 namespace DontMessUpProd;
 
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
+
 define( 'DONT_MESS_UP_PROD_VERSION', '1.0.0-alpha' );
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-environment-indicator.php';
