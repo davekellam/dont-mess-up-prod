@@ -101,32 +101,15 @@ class Admin_Settings {
 	 * @return void
 	 */
 	public function register_settings(): void {
-		$default_colors = Environment_Indicator::get_instance()->get_default_colors();
-
-		// Register settings for each environment
-		foreach ( $this->environments as $env ) {
-			// Register color setting
-			register_setting(
-				self::SETTINGS_GROUP,
-				"dmup_color_{$env}",
-				[
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_hex_color',
-					'default'           => $default_colors[ $env ],
-				]
-			);
-
-			// Register URL setting
-			register_setting(
-				self::SETTINGS_GROUP,
-				"dmup_url_{$env}",
-				[
-					'type'              => 'string',
-					'sanitize_callback' => 'esc_url_raw',
-					'default'           => '',
-				]
-			);
-		}
+		register_setting(
+			self::SETTINGS_GROUP,
+			self::SETTINGS_GROUP,
+			[
+				'type'              => 'array',
+				'sanitize_callback' => [ $this, 'sanitize_settings' ],
+				'default'           => [],
+			]
+		);
 
 		// Add settings section
 		add_settings_section(
@@ -199,32 +182,34 @@ class Admin_Settings {
 	public function render_environment_fields( array $args ): void {
 		$env            = $args['environment'];
 		$default_colors = Environment_Indicator::get_instance()->get_default_colors();
-		$color_option   = "dmup_color_{$env}";
-		$url_option     = "dmup_url_{$env}";
-		$color_value    = get_option( $color_option, $default_colors[ $env ] );
-		$url_value      = get_option( $url_option, '' );
+		$options        = get_option( self::SETTINGS_GROUP, [] );
+		$env_options    = $options[ $env ] ?? [];
+		$color_value    = $env_options['color'] ?? $default_colors[ $env ];
+		$url_value      = $env_options['url'] ?? '';
+		$color_id       = "dmup_settings_{$env}_color";
+		$url_id         = "dmup_settings_{$env}_url";
 		?>
 		<div style="margin-bottom: 10px;">
-			<label for="<?php echo esc_attr( $color_option ); ?>" style="display: inline-block; width: 80px;">
+			<label for="<?php echo esc_attr( $color_id ); ?>" style="display: inline-block; width: 80px;">
 				<?php esc_html_e( 'Color:', 'dont-mess-up-prod' ); ?>
 			</label>
 			<input 
 				type="color" 
-				id="<?php echo esc_attr( $color_option ); ?>" 
-				name="<?php echo esc_attr( $color_option ); ?>" 
+				id="<?php echo esc_attr( $color_id ); ?>" 
+				name="<?php echo esc_attr( self::SETTINGS_GROUP ); ?>[<?php echo esc_attr( $env ); ?>][color]" 
 				value="<?php echo esc_attr( $color_value ); ?>"
 				style="width: 60px; height: 30px; vertical-align: middle;"
 			/>
 			<code style="margin-left: 10px; vertical-align: middle;"><?php echo esc_html( $color_value ); ?></code>
 		</div>
 		<div>
-			<label for="<?php echo esc_attr( $url_option ); ?>" style="display: inline-block; width: 80px;">
+			<label for="<?php echo esc_attr( $url_id ); ?>" style="display: inline-block; width: 80px;">
 				<?php esc_html_e( 'URL:', 'dont-mess-up-prod' ); ?>
 			</label>
 			<input 
 				type="url" 
-				id="<?php echo esc_attr( $url_option ); ?>" 
-				name="<?php echo esc_attr( $url_option ); ?>" 
+				id="<?php echo esc_attr( $url_id ); ?>" 
+				name="<?php echo esc_attr( self::SETTINGS_GROUP ); ?>[<?php echo esc_attr( $env ); ?>][url]" 
 				value="<?php echo esc_attr( $url_value ); ?>"
 				placeholder="<?php esc_attr_e( 'https://example.com', 'dont-mess-up-prod' ); ?>"
 				class="regular-text"
@@ -234,14 +219,51 @@ class Admin_Settings {
 	}
 
 	/**
+	 * Sanitize settings for all environments
+	 *
+	 * @param array $settings Raw settings array
+	 * @return array Sanitized settings array
+	 */
+	public function sanitize_settings( array $settings ): array {
+		$default_colors = Environment_Indicator::get_instance()->get_default_colors();
+		$sanitized      = [];
+
+		foreach ( $this->environments as $env ) {
+			$env_settings = $settings[ $env ] ?? [];
+			$color        = '';
+			$url          = '';
+
+			if ( isset( $env_settings['color'] ) ) {
+				$color = sanitize_hex_color( $env_settings['color'] );
+			}
+
+			if ( isset( $env_settings['url'] ) ) {
+				$url = esc_url_raw( $env_settings['url'] );
+			}
+
+			if ( $color && $color !== $default_colors[ $env ] ) {
+				$sanitized[ $env ]['color'] = $color;
+			}
+
+			if ( '' !== $url ) {
+				$sanitized[ $env ]['url'] = $url;
+			}
+		}
+
+		return $sanitized;
+	}
+
+	/**
 	 * Apply saved colors to the environment colors filter
 	 *
 	 * @param array $colors Default colors array
 	 * @return array Modified colors array
 	 */
 	public function apply_saved_colors( array $colors ): array {
+		$options = get_option( self::SETTINGS_GROUP, [] );
+
 		foreach ( $this->environments as $env ) {
-			$saved_color = get_option( "dmup_color_{$env}" );
+			$saved_color = $options[ $env ]['color'] ?? '';
 			if ( $saved_color ) {
 				$colors[ $env ] = $saved_color;
 			}
@@ -257,8 +279,10 @@ class Admin_Settings {
 	 * @return array Modified URLs array
 	 */
 	public function apply_saved_urls( array $urls ): array {
+		$options = get_option( self::SETTINGS_GROUP, [] );
+
 		foreach ( $this->environments as $env ) {
-			$saved_url = get_option( "dmup_url_{$env}" );
+			$saved_url = $options[ $env ]['url'] ?? '';
 			if ( $saved_url ) {
 				$urls[ $env ] = $saved_url;
 			}
