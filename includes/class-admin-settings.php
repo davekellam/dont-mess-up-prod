@@ -40,6 +40,8 @@ class Admin_Settings {
 	/**
 	 * Environment definitions
 	 *
+	 * These are currently hardcoded into WordPress with no way to retrieve.
+	 *
 	 * @var array<string>
 	 */
 	private array $environments = [
@@ -174,7 +176,9 @@ class Admin_Settings {
 	}
 
 	/**
-	 * Render environment fields (color and URL)
+	 * Render environment fields
+	 *
+	 * Will produce the color picker and URL input for each of the environments
 	 *
 	 * @param array $args Field arguments containing the environment key
 	 * @return void
@@ -241,10 +245,12 @@ class Admin_Settings {
 				$url = esc_url_raw( $env_settings['url'] );
 			}
 
+			// ignore if color is default
 			if ( $color && $color !== $default_colors[ $env ] ) {
 				$sanitized[ $env ]['color'] = $color;
 			}
 
+			// ignore if URL is empty (will silently remove invalid urls though)
 			if ( '' !== $url ) {
 				$sanitized[ $env ]['url'] = $url;
 			}
