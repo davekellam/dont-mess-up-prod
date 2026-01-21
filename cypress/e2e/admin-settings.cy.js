@@ -13,8 +13,8 @@ describe("Admin Settings - Environment Configuration", () => {
     const environments = ["local", "development", "staging", "production"]
 
     environments.forEach((env) => {
-      cy.get(`#dmup_color_${env}`).should("exist")
-      cy.get(`#dmup_url_${env}`).should("exist")
+      cy.get(`#dmup_settings_${env}_color`).should("exist")
+      cy.get(`#dmup_settings_${env}_url`).should("exist")
     })
   })
 
