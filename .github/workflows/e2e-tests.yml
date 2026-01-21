@@ -19,7 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      contains(github.event.pull_request.labels.*.name, 'run-e2e')
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' &&
+        contains(github.event.pull_request.labels.*.name, 'run-e2e'))
 
     steps:
     - name: Checkout
