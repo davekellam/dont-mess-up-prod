@@ -17,7 +17,7 @@ See the plugin in action:
 
 1. Upload the plugin files to `/wp-content/plugins/dont-mess-up-prod/`
 2. Activate the plugin through the "Plugins" screen in WordPress
-3. Configure the plugin using filters (see Configuration section below)
+3. Configure the plugin via the Settings → Don’t Mess Up Prod screen (or filters)
 
 ### Composer
 
@@ -27,7 +27,16 @@ composer require davekellam/dont-mess-up-prod
 
 ## Configuration
 
-The plugin can be configured using WordPress filters.
+The plugin can be configured using the WordPress admin screen or using filters.
+
+### Admin Settings
+
+Go to **Settings → Don’t Mess Up Prod** to configure:
+
+- **Colors** for each environment (local, development, staging, production)
+- **URLs** for each environment (used for detection and quick links)
+
+Settings are saved per environment, and defaults are provided out of the box.
 
 ### Example Configuration (mu-plugin)
 
@@ -108,7 +117,9 @@ function dmup_set_environment_colors( $colors ) {
         'production'  => '#dc3545', // red
     ];
 }
-add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors' );
+// Note: Admin settings are applied at priority 20.
+// If you want to override admin settings in code, use a higher priority.
+add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors', 30 );
 ```
 
 ## Environment Detection

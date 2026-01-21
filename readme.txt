@@ -20,7 +20,7 @@ Don't Mess Up Prod helps developers and content managers quickly identify which 
 
 The plugin can be installed via the search interface, manually or via composer.
 
-Right now, there is no admin UI. To customize colors or configure urls, you need to add filters via code (`functions.php` or a mu-plugin). See the FAQ for examples.
+You can configure colors and environment URLs in **Settings → Don't Mess Up Prod**. Filters are still supported for advanced configuration or for overriding the admin settings.
 
 
 == Frequently Asked Questions ==
@@ -29,14 +29,14 @@ Right now, there is no admin UI. To customize colors or configure urls, you need
 
 The plugin detects your environment automatically in two ways:
 
-1. **URL Matching** – Configure environment URLs using the `dmup_environment_urls` filter
+1. **URL Matching** – Configure environment URLs in **Settings → Don't Mess Up Prod**, or using the `dmup_environment_urls` filter
 2. **WP_ENVIRONMENT_TYPE** – Set this constant in your `wp-config.php`:
 
 `define( 'WP_ENVIRONMENT_TYPE', 'staging' );`
 
 = How do I customize the colors? =
 
-Add a filter in your theme's `functions.php` or an mu-plugin:
+Use **Settings → Don't Mess Up Prod** to set colors, or add a filter in your theme's `functions.php` or a mu-plugin:
 
 `
 add_filter( 'dmup_environment_colors', function( $colors ) {
@@ -71,7 +71,7 @@ add_filter( 'dmup_allowed_users', function( $users ) {
 
 = How do I add environment URLs for quick switching? =
 
-Configure environment URLs to show a menu with links to other environments:
+Configure environment URLs in **Settings → Don't Mess Up Prod** to show a menu with links to other environments, or use the filter:
 
 `
 add_filter( 'dmup_environment_urls', function() {
@@ -91,6 +91,7 @@ add_filter( 'dmup_environment_urls', function() {
 3. Development environment indicator (purple)
 4. Local environment indicator (grey)
 5. Staging environment indicator with environment switcher menu
+6. Admin settings screen
 
 == Changelog ==
 
