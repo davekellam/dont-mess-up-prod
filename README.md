@@ -1,15 +1,10 @@
 # Don't Mess Up Prod
 
-This plugin displays a colored environment indicator in the WordPress admin bar to help developers and content managers quickly identify which environment they're working in. This helps prevent accidentally making changes to production sites when you think you're working on staging or development.
+This plugin displays a colored environment indicator in the WordPress admin bar to help developers and content managers identify which environment they're working in. 
 
-## WordPress Playground
+![Environment indicator screenshot](.wordpress-org/screenshot-1.png)
 
-See the plugin in action:
-
-- [**Local**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/local.json) – Grey
-- [**Development**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/development.json) – Purple
-- [**Staging**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/staging.json) – Green
-- [**Production**](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/production.json) – Red
+See a [live preview on Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/davekellam/dont-mess-up-prod/main/.wordpress-org/blueprints/blueprint.json).
 
 ## Installation
 
@@ -24,6 +19,19 @@ See the plugin in action:
 ```bash
 composer require davekellam/dont-mess-up-prod
 ```
+
+## Environment Detection
+
+The plugin detects the current environment using this priority order:
+
+1. **URL matching** – Compares the current site URL against the configured environment URLs. This list will also be used to generate a list of links that appears on hover in the admin bar.
+2. **`wp_get_environment_type()`** – Which defaults to `production` and can be set via php constant:
+
+    ```php
+    define( 'WP_ENVIRONMENT_TYPE', 'staging' );
+    ```
+
+The indicator is visible to users who either meet the minimum capability (defaults to `publish_posts`, filterable via `dmup_minimum_capability`) or whose username appears in the allowed users filter. This keeps visibility limited to the folks who need the context.
 
 ## Configuration
 
@@ -121,19 +129,6 @@ function dmup_set_environment_colors( $colors ) {
 // If you want to override admin settings in code, use a higher priority.
 add_filter( 'dmup_environment_colors', 'dmup_set_environment_colors', 30 );
 ```
-
-## Environment Detection
-
-The plugin detects the current environment using this priority order:
-
-1. **URL matching** – Compares the current site URL against the configured environment URLs. This list will also be used to generate a list of links that appears on hover in the admin bar.
-2. **`wp_get_environment_type()`** – Which defaults to `production` and can be set via php constant:
-
-    ```php
-    define( 'WP_ENVIRONMENT_TYPE', 'staging' );
-    ```
-
-The indicator is visible to users who either meet the minimum capability (defaults to `publish_posts`, filterable via `dmup_minimum_capability`) or whose username appears in the allowed users filter. This keeps visibility limited to the folks who need the context.
 
 ## License
 
