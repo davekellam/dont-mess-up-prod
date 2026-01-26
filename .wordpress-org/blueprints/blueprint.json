@@ -1,6 +1,6 @@
 {
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-  "landingPage": "/wp-admin/",
+  "landingPage": "/wp-admin/options-general.php?page=dont-mess-up-prod",
   "steps": [
     {
       "step": "login",
