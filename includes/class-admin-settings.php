@@ -82,6 +82,26 @@ class Admin_Settings {
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_filter( 'dmup_environment_colors', [ $this, 'apply_saved_colors' ], 20 );
 		add_filter( 'dmup_environment_urls', [ $this, 'apply_saved_urls' ], 20 );
+		add_filter( 'plugin_action_links_dont-mess-up-prod/dont-mess-up-prod.php', [ $this, 'add_plugin_action_links' ] );
+	}
+
+	/**
+	 * Add Settings link to the plugins list table
+	 *
+	 * @param array $links Existing plugin action links
+	 * @return array
+	 */
+	public function add_plugin_action_links( array $links ): array {
+		$settings_url  = \admin_url( 'options-general.php?page=' . self::PAGE_SLUG );
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( $settings_url ),
+			esc_html__( 'Settings', 'dont-mess-up-prod' )
+		);
+
+		array_unshift( $links, $settings_link );
+
+		return $links;
 	}
 
 	/**
