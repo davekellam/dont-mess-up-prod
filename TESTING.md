@@ -20,7 +20,7 @@ npm run cy:open
 
 ## Prerequisites
 
-- Node.js 22+ and npm
+- Node.js 24+ and npm
 - Docker (for wp-env)
 
 ## Setup
