@@ -7,6 +7,7 @@ module.exports = defineConfig({
     viewportHeight: 720,
     video: false,
     screenshotOnRunFailure: true,
+    allowCypressEnv: false
   },
   env: {
     wpUsername: 'admin',

@@ -2,22 +2,24 @@
  * Cypress custom command to log in to WordPress admin
  */
 Cypress.Commands.add('wpLogin', (username, password) => {
-  const user = username || Cypress.env('wpUsername')
-  const pass = password || Cypress.env('wpPassword')
-  
-  cy.getCookies().then(cookies => {
-    let hasMatch = false
-    cookies.forEach((cookie) => {
-      if (cookie.name.startsWith('wordpress_logged_in_')) {
-        hasMatch = true
+  cy.env(['wpUsername', 'wpPassword']).then(envValues => {
+    const user = username || envValues.wpUsername
+    const pass = password || envValues.wpPassword
+
+    cy.getCookies().then(cookies => {
+      let hasMatch = false
+      cookies.forEach((cookie) => {
+        if (cookie.name.startsWith('wordpress_logged_in_')) {
+          hasMatch = true
+        }
+      })
+
+      if (!hasMatch) {
+        cy.visit('/wp-login.php').wait(1000)
+        cy.get('#user_login').type(user)
+        cy.get('#user_pass').type(`${pass}{enter}`)
       }
     })
-    
-    if (!hasMatch) {
-      cy.visit('/wp-login.php').wait(1000)
-      cy.get('#user_login').type(user)
-      cy.get('#user_pass').type(`${pass}{enter}`)
-    }
   })
 })
 
