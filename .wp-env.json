@@ -12,5 +12,6 @@
     "WP_DEBUG_LOG": true,
     "WP_DEBUG_DISPLAY": false,
     "WP_ENVIRONMENT_TYPE": "local"
-  }
+  },
+  "testsEnvironment": false
 }
