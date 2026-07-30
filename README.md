@@ -1,6 +1,6 @@
 # Don't Mess Up Prod
 
-This plugin displays a colored environment indicator in the WordPress admin bar to help developers and content managers identify which environment they're working in. 
+This plugin displays an environment indicator in the WordPress admin bar to help developers and content managers identify which environment they're working in.
 
 ![Environment indicator screenshot](.wordpress-org/screenshot-1.png)
 

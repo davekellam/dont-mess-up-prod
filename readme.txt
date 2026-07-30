@@ -8,11 +8,11 @@ Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Displays a colored environment indicator in the admin bar.
+Displays an environment indicator in the admin bar.
 
 == Description ==
 
-Don't Mess Up Prod helps developers and content managers quickly identify which environment they're working in by displaying a colored indicator in the WordPress admin bar. Hopefully this prevents messing up production 😅
+Don't Mess Up Prod helps developers and content managers quickly identify which environment they're working in by displaying an indicator in the WordPress admin bar. Hopefully this prevents messing up production 😅
 
 [Active development is on Github](https://github.com/davekellam/dont-mess-up-prod)
 
