@@ -80,6 +80,7 @@ class Admin_Settings {
 	public function add_hooks(): void {
 		add_action( 'admin_menu', [ $this, 'add_settings_page' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_color_picker' ] );
 		add_filter( 'dmup_environment_colors', [ $this, 'apply_saved_colors' ], 20 );
 		add_filter( 'dmup_environment_urls', [ $this, 'apply_saved_urls' ], 20 );
 		add_filter( 'plugin_action_links_dont-mess-up-prod/dont-mess-up-prod.php', [ $this, 'add_plugin_action_links' ] );
@@ -102,6 +103,21 @@ class Admin_Settings {
 		array_unshift( $links, $settings_link );
 
 		return $links;
+	}
+
+	/**
+	 * Enqueue wp-color-picker script and style on the settings page
+	 *
+	 * @param string $hook_suffix The current admin page hook suffix
+	 * @return void
+	 */
+	public function enqueue_color_picker( string $hook_suffix ): void {
+		if ( 'settings_page_' . self::PAGE_SLUG !== $hook_suffix ) {
+			return;
+		}
+
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'wp-color-picker' );
 	}
 
 	/**
@@ -175,6 +191,11 @@ class Admin_Settings {
 				submit_button( __( 'Save Settings', 'dont-mess-up-prod' ) );
 				?>
 			</form>
+			<script>
+				jQuery( document ).ready( function( $ ) {
+					$( '.dmup-color-picker' ).wpColorPicker();
+				} );
+			</script>
 		</div>
 		<?php
 	}
@@ -220,13 +241,12 @@ class Admin_Settings {
 				<?php esc_html_e( 'Color:', 'dont-mess-up-prod' ); ?>
 			</label>
 			<input 
-				type="color" 
+				type="text" 
 				id="<?php echo esc_attr( $color_id ); ?>" 
 				name="<?php echo esc_attr( self::SETTINGS_GROUP ); ?>[<?php echo esc_attr( $env ); ?>][color]" 
 				value="<?php echo esc_attr( $color_value ); ?>"
-				style="width: 60px; height: 30px; vertical-align: middle;"
+				class="dmup-color-picker"
 			/>
-			<code style="margin-left: 10px; vertical-align: middle;"><?php echo esc_html( $color_value ); ?></code>
 		</div>
 		<div>
 			<label for="<?php echo esc_attr( $url_id ); ?>" style="display: inline-block; width: 80px;">
